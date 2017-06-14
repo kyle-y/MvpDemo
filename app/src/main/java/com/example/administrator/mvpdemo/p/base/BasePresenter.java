@@ -1,6 +1,6 @@
 package com.example.administrator.mvpdemo.p.base;
 
-import com.example.administrator.mvpdemo.m.tools.ErrorListener;
+import com.example.administrator.mvpdemo.m.rxhelper.ErrorListener;
 import com.example.administrator.mvpdemo.v.base.IBaseView;
 
 import java.lang.ref.Reference;
