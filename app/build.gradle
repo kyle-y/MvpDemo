@@ -41,4 +41,5 @@ dependencies {
     compile 'com.alibaba:fastjson:1.2.33'
     compile 'com.jakewharton:butterknife:8.6.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
 }

@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.example.administrator.mvpdemo.m.http.HttpsUtils;
 import com.example.administrator.mvpdemo.m.http.RequestInterceptor;
+import com.example.administrator.mvpdemo.m.tools.ErrorListener;
+import com.example.administrator.mvpdemo.m.tools.RxErrorHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
  * Created by Administrator on 2017/6/12.
@@ -67,6 +70,7 @@ public class ClientModule {
     List<Interceptor> provideInterceptors(Application context) {
         List<Interceptor> interceptors = new ArrayList<>();
         interceptors.add(new RequestInterceptor(context));
+        interceptors.add(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY));
         return interceptors;
     }
 
@@ -97,6 +101,9 @@ public class ClientModule {
     }
 
 
-    // TODO 添加RxErrorHandler
-
+    @Singleton
+    @Provides
+    ErrorListener provideErrorHanler(){
+        return new RxErrorHandler();
+    }
 }
