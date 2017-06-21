@@ -1,5 +1,6 @@
 package com.example.administrator.mvpdemo.v.iview;
 
+import com.example.administrator.mvpdemo.m.bean.douban.HotMovieBean;
 import com.example.administrator.mvpdemo.v.base.IBaseView;
 
 /**
@@ -7,5 +8,5 @@ import com.example.administrator.mvpdemo.v.base.IBaseView;
  */
 
 public interface ImainAcitivityView extends IBaseView{
-    void show(String content);
+    void show(HotMovieBean data, boolean isLoadMore);
 }
