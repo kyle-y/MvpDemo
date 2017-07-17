@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao' // apply plugin
 
 android {
     compileSdkVersion 25
@@ -16,6 +17,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    greendao {
+        schemaVersion 1
+        daoPackage 'com.demo.greendao'
+        targetGenDir 'src/main/java'
     }
 }
 
@@ -47,4 +53,7 @@ dependencies {
     compile 'com.github.bumptech.glide:okhttp3-integration:1.5.0@aar'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.18'
+    compile 'org.greenrobot:greendao:3.2.2'
+    debugCompile 'com.facebook.stetho:stetho:1.5.0'
+    compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
 }

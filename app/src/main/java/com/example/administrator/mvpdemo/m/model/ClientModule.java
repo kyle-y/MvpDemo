@@ -6,6 +6,7 @@ import com.example.administrator.mvpdemo.m.http.HttpsUtils;
 import com.example.administrator.mvpdemo.m.http.RequestInterceptor;
 import com.example.administrator.mvpdemo.m.rxhelper.ErrorListener;
 import com.example.administrator.mvpdemo.m.rxhelper.RxErrorHandler;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,24 +75,24 @@ public class ClientModule {
         return interceptors;
     }
 
-//    @Singleton
-//    @Provides       //network拦截器
-//    Interceptor provodeInterceptor(){
-//        return null;
-//    }
+    @Singleton
+    @Provides       //network拦截器
+    Interceptor provodeInterceptor(){
+        return new StethoInterceptor();
+    }
 
     @Singleton
     @Provides
     OkHttpClient provideClient(Application application,
                                OkHttpClient.Builder builder,
-//                               Interceptor interceptor,
+                               Interceptor interceptor,
 //                               HttpsUtils.SSLParams sslParams,
                                List<Interceptor> interceptors,
                                HostnameVerifier hostnameVerifier) {
         builder.connectTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
                 .writeTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
                 .readTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
-//                .addNetworkInterceptor(interceptor)
+                .addNetworkInterceptor(interceptor)
 //                .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)
                 .hostnameVerifier(hostnameVerifier);
         for (Interceptor tempInterceptor : interceptors) {

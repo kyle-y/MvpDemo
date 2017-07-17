@@ -1,6 +1,9 @@
 package com.example.administrator.mvpdemo.p;
 
+import com.demo.greendao.MoviesDao;
 import com.example.administrator.mvpdemo.m.bean.douban.HotMovieBean;
+import com.example.administrator.mvpdemo.m.database.GreendaoManager;
+import com.example.administrator.mvpdemo.m.database.daos.Movies;
 import com.example.administrator.mvpdemo.m.rxhelper.ErrorListener;
 import com.example.administrator.mvpdemo.m.rxhelper.RequestCallback;
 import com.example.administrator.mvpdemo.m.rxhelper.RetryWithDelay;
@@ -22,11 +25,18 @@ public class MainActivityPst extends BasePresenter<ImainAcitivityView> {
 
     private int start = 1, count = 10;
     private boolean isLoadMore;
+    private MoviesDao moviesDao;
 
     @Inject
     public MainActivityPst(ErrorListener errorListener, DoubanService doubanService) {
         super(errorListener);
         this.doubanService = doubanService;
+    }
+
+    @Override
+    public void attachView(ImainAcitivityView view) {
+        super.attachView(view);
+        moviesDao = GreendaoManager.getInstance().getMainSession().getMoviesDao();
     }
 
     private void request() {
@@ -38,20 +48,40 @@ public class MainActivityPst extends BasePresenter<ImainAcitivityView> {
                     @Override
                     public void onNext(@NonNull HotMovieBean data) {
                         super.onNext(data);
+                        changeData(data);
                         mView.show(data, isLoadMore);
                     }
                 });
     }
 
-    public void refresh(){
+    public void refresh() {
         start = 1;
         isLoadMore = false;
         request();
     }
 
-    public void loadMore(){
+    public void loadMore() {
         start += count;
         isLoadMore = true;
         request();
+    }
+
+
+    boolean isFirstTime = true;
+    private void changeData(HotMovieBean data) {
+        for (HotMovieBean.SubjectsBean bean : data.getSubjects()
+                ) {
+            Movies movies = new Movies(Long.parseLong(bean.getId()), bean.getTitle(), Integer.parseInt(bean.getYear()), bean.getGenres().toString());
+            if (isLoadMore) {
+                moviesDao.insert(movies);
+            } else {
+                if (isFirstTime) {
+                    moviesDao.insert(movies);
+                } else {
+                    moviesDao.update(movies);
+                }
+            }
+        }
+        isFirstTime = false;
     }
 }

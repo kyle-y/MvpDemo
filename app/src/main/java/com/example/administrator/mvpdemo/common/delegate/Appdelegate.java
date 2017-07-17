@@ -6,6 +6,7 @@ import com.example.administrator.mvpdemo.m.component.ApiComponent;
 import com.example.administrator.mvpdemo.m.component.AppComponent;
 import com.example.administrator.mvpdemo.m.component.DaggerApiComponent;
 import com.example.administrator.mvpdemo.m.component.DaggerAppComponent;
+import com.example.administrator.mvpdemo.m.database.GreendaoManager;
 import com.example.administrator.mvpdemo.m.model.ApiModule;
 import com.example.administrator.mvpdemo.m.model.AppModule;
 
@@ -28,6 +29,7 @@ public class Appdelegate {
 
     public void onCreate() {
         initInject();
+        initDb();
     }
 
     private void initInject() {
@@ -39,6 +41,10 @@ public class Appdelegate {
                 .apiModule(new ApiModule())
                 .appModule(getAppModule())
                 .build();
+    }
+
+    private void initDb(){
+        GreendaoManager.getInstance().init(appContext);
     }
 
     private AppModule getAppModule(){
